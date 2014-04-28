@@ -115,10 +115,7 @@
 
 
 # Import system modules.
-import sys
-import os
-import time
-import arcpy
+import sys, os, time, arcpy
 arcpy.CheckOutExtension("3D") # Check out 3D extension license
 
 starttime = time.clock() 
@@ -128,6 +125,24 @@ arcpy.AddMessage("%s" % (""))  #space out screen messages
 
 arcpy.AddMessage("%s" % ("Setting Workspace and settings"))
 
+
+
+
+### ****************************************************Input from ArcGIS Tool*******************************************************
+
+inDEM_list_path = arcpy.GetParameterAsText(0)
+inDEM_list_name = arcpy.GetParameterAsText(1)
+inDEMpath = arcpy.GetParameterAsText(2)
+inDEMdatum = arcpy.GetParameterAsText(3)
+
+out_folder_path = arcpy.GetParameterAsText(4)   
+
+startElev_feet = float(arcpy.GetParameterAsText(5))
+endElev_feet = float(arcpy.GetParameterAsText(6))   
+incElev_feet = float(arcpy.GetParameterAsText(7))                           
+numDecimals = int(arcpy.GetParameterAsText(8))        
+zFact = float(arcpy.GetParameterAsText(9))
+refPlane = arcpy.GetParameterAsText(10) 
 
 
 ### *************************************************** USER-DEFINED VARIABLES *******************************************************
@@ -179,6 +194,7 @@ refPlane        = "BELOW"   # String:  Set to ABOVE or BELOW, see the help for S
 
 
 # Prepare output file.
+# RYAN COMMENT - Put check to see if file exists in folder.
 outFile_name   = "StageLookup" + inDEMdatum + ".txt"          # Name of output text file of elevation, area, and volume .
 #                                                             #    WARNING: will overwrite existing file.
 #                                                             # The required naming convention for the data table files are 
@@ -230,6 +246,7 @@ output.write("%s%s%s  %s,  %s,  %s,  %s,  %s,  %s\r\n" % ("Input DEM list=  ",in
 arcpy.AddMessage("%s" % (""))  #space out screen messages
 arcpy.AddMessage("%s" % (""))  #space out screen messages
 arcpy.AddMessage("%s" % ("OUTPUT COLUMNS:"))
+arcpy.AddMessage("%s, %s, %s, %s, %s, %s" % ("parcel_number","refElev_feet","not_used","not_used", "Volume_acre-feet","2D_Area_acres")) #RYAN switch 4th & 5th column
 arcpy.AddMessage("%s, %s, %s, %s, %s, %s" % ("parcel_number","refElev_feet","not_used","Volume_acre-feet","not_used","2D_Area_acres"))
 
 # Round increment to user-specified number of decimals to prevent deviations due to floating point values.
@@ -244,8 +261,8 @@ for aLine in inDEM_list:
     inDEM = os.path.join(inDEMpath,inDEMname)
     if parc_numSTR is None or parc_numSTR == "":
         break
-    arcpy.AddMessage("%s" % (""))  #space out screen messages
-    arcpy.AddMessage("%s" % (""))  #space out screen messages
+    arcpy.AddMessage("")  #space out screen messages
+    arcpy.AddMessage("")  #space out screen messages
     arcpy.AddMessage("%s, %s" % ("Parcel Number= " + parc_numSTR,"Input DEM= "+ inDEM))
     parc_number = int(parc_numSTR)
 
@@ -282,10 +299,14 @@ for aLine in inDEM_list:
             vol3d_acft   = vol3d_m3  / 1233.489
      
             # Report the input and output values to the screen.
+
+            arcpy.AddMessage("%i,  %f,  %s,  %f,  %s,  %f" % (parc_number,refElev_feet,"not_used","not_used",vol3d_acft,area2d_ac)) # RYAN fix, switch 4th & 5th columns
             arcpy.AddMessage("%i,  %f,  %s,  %f,  %s,  %f" % (parc_number,refElev_feet,"not_used",vol3d_acft,"not_used",area2d_ac))
             # The above line may be commented out if screen display is not needed.
        
             # Write the input and output values to the output file.
+
+            #RYAN COMMENT. Correct output (from top): parc_number, refElev_feet,  not_used,  Volume_acft,  not_used,  2D_Area_ac   (seems okay to me) 
             output.write("%i,  %f,  %s,  %f,  %s,  %f\r\n" % (parc_number,refElev_feet,"not_used",vol3d_acft,"not_used",area2d_ac))
         
             # Increment the refPlane elevation and loop and round to user-specified number of decimals
