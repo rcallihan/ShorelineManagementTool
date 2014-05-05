@@ -152,38 +152,38 @@ refPlane = arcpy.GetParameterAsText(10)
 ### This is the only place that generally would need to be modified by the user for their project.
 ###
 ###
-inDEM_list_path = r"F:\ShorelineDirectory\Tool_Source_Files\Python_Scripts" # String: Path to folder with file of input list of DEMs.
-###                                                                         #         Do not include a trailing "\" at end. 
-inDEM_list_name = "LWRV_5meter_DEM_NAVD88.csv"                # String: Filename of input list of DEMs. 
-###                                                           #        This must be a comma delimited text file with no header line.
-###                                                           #        The first field is the integer of the land parcel number; 
-###                                                           #           (should = PARC_NUMBER from the Parcels layer).
-###                                                           #        The second is the name of the input DEM.
-###                                                           #        There should be no additional fields on each record.
-###                                                           #        Two lines from the example file inDEM_list_name
-###                                                           #            "LWRV_5meter_DEM_NAVD88.csv" are show below:
-###                                                           #        9,p9_5mdem88
-###                                                           #        10,p10_5mdem88
-###
-inDEMpath       = r"F:\ShorelineDirectory\GIS_Layers"         # String:  Path to input DEMs.
-###                                                           #             Do not include a trailing "\" at end. 
+# inDEM_list_path = r"F:\ShorelineDirectory\Tool_Source_Files\Python_Scripts" # String: Path to folder with file of input list of DEMs.
+# ###                                                                         #         Do not include a trailing "\" at end. 
+# inDEM_list_name = "LWRV_5meter_DEM_NAVD88.csv"                # String: Filename of input list of DEMs. 
+# ###                                                           #        This must be a comma delimited text file with no header line.
+# ###                                                           #        The first field is the integer of the land parcel number; 
+# ###                                                           #           (should = PARC_NUMBER from the Parcels layer).
+# ###                                                           #        The second is the name of the input DEM.
+# ###                                                           #        There should be no additional fields on each record.
+# ###                                                           #        Two lines from the example file inDEM_list_name
+# ###                                                           #            "LWRV_5meter_DEM_NAVD88.csv" are show below:
+# ###                                                           #        9,p9_5mdem88
+# ###                                                           #        10,p10_5mdem88
+# ###
+# inDEMpath       = r"F:\ShorelineDirectory\GIS_Layers"         # String:  Path to input DEMs.
+# ###                                                           #             Do not include a trailing "\" at end. 
 
-###                                                           #             Do not include a trailing "\" at end. 
-inDEMdatum      = "NAVD88"                                    # String:  Vertical datum of input DEMs: NAVD88 or NGVD29.
-out_folder_path = r"F:\ShorelineDirectory\Tool_Source_Files"  # String:  Path to output folder for output text file.
-###                                                           #             The file(s) must be located in the folder: 
-###                                                           #             \ShorelineDirectory\Tool_Source_Files
-###                                                           #             Do not include a trailing "\" at end. 
-###
-startElev_feet  = 4135.30   # Float:   Start elevation level (units in feet)  NOTE: this must be the LOWER elevation value.
-endElev_feet    = 4176.30   # Float:   End elevation level   (units in feet)  NOTE: this must be the UPPER elevation value.
-incElev_feet    = 0.01      # Float:   Elevation increment to use for iteration (units in feet).
-#                           #             Value will be rounded to "numDecimals" set below.
-numDecimals     = 2         # Integer: Number of decimals to round feet elevation values.
-zFact           = 1.0       # Float:   Z factor: Set to 1.0 if ground and elevation units of DEM are same units (such as meters).
-###                         #             See help for SurfaceVolume_3d if DEM ground and elevation units are different.
-refPlane        = "BELOW"   # String:  Set to ABOVE or BELOW, see the help for SurfaceVolume_3d.
-###                         #             (selects whether to calculate area & volume above or below given reference plane elev).
+# ###                                                           #             Do not include a trailing "\" at end. 
+# inDEMdatum      = "NAVD88"                                    # String:  Vertical datum of input DEMs: NAVD88 or NGVD29.
+# out_folder_path = r"F:\ShorelineDirectory\Tool_Source_Files"  # String:  Path to output folder for output text file.
+# ###                                                           #             The file(s) must be located in the folder: 
+# ###                                                           #             \ShorelineDirectory\Tool_Source_Files
+# ###                                                           #             Do not include a trailing "\" at end. 
+# ###
+# startElev_feet  = 4135.30   # Float:   Start elevation level (units in feet)  NOTE: this must be the LOWER elevation value.
+# endElev_feet    = 4176.30   # Float:   End elevation level   (units in feet)  NOTE: this must be the UPPER elevation value.
+# incElev_feet    = 0.01      # Float:   Elevation increment to use for iteration (units in feet).
+# #                           #             Value will be rounded to "numDecimals" set below.
+# numDecimals     = 2         # Integer: Number of decimals to round feet elevation values.
+# zFact           = 1.0       # Float:   Z factor: Set to 1.0 if ground and elevation units of DEM are same units (such as meters).
+# ###                         #             See help for SurfaceVolume_3d if DEM ground and elevation units are different.
+# refPlane        = "BELOW"   # String:  Set to ABOVE or BELOW, see the help for SurfaceVolume_3d.
+# ###                         #             (selects whether to calculate area & volume above or below given reference plane elev).
 ###
 ###
 ### End Setting Variables (user should not normally need to modify script below this point).
@@ -240,14 +240,14 @@ arcpy.AddMessage("%s" % (""))  #space out screen messages
 
 # Write output file header info with column names.
 output.write("%s%s%s  %s,  %s,  %s,  %s,  %s,  %s\r\n" % ("Input DEM list=  ",inDEM_list_fullpath,";  Columns= ","parc_number",\
-   "refElev_feet","not_used","Volume_acft","not_used","2D_Area_ac"))
+   "refElev_feet","not_used", "not_used", "Volume_acft", "2D_Area_ac"))
 
 # Write screen header info with column names (the lines below may be commented out if screen display is not needed).
 arcpy.AddMessage("%s" % (""))  #space out screen messages
 arcpy.AddMessage("%s" % (""))  #space out screen messages
 arcpy.AddMessage("%s" % ("OUTPUT COLUMNS:"))
 arcpy.AddMessage("%s, %s, %s, %s, %s, %s" % ("parcel_number","refElev_feet","not_used","not_used", "Volume_acre-feet","2D_Area_acres")) #RYAN switch 4th & 5th column
-arcpy.AddMessage("%s, %s, %s, %s, %s, %s" % ("parcel_number","refElev_feet","not_used","Volume_acre-feet","not_used","2D_Area_acres"))
+#arcpy.AddMessage("%s, %s, %s, %s, %s, %s" % ("parcel_number","refElev_feet","not_used","Volume_acre-feet","not_used","2D_Area_acres"))
 
 # Round increment to user-specified number of decimals to prevent deviations due to floating point values.
 incElev_feet = round(incElev_feet,numDecimals)
@@ -301,13 +301,13 @@ for aLine in inDEM_list:
             # Report the input and output values to the screen.
 
             arcpy.AddMessage("%i,  %f,  %s,  %f,  %s,  %f" % (parc_number,refElev_feet,"not_used","not_used",vol3d_acft,area2d_ac)) # RYAN fix, switch 4th & 5th columns
-            arcpy.AddMessage("%i,  %f,  %s,  %f,  %s,  %f" % (parc_number,refElev_feet,"not_used",vol3d_acft,"not_used",area2d_ac))
+            #arcpy.AddMessage("%i,  %f,  %s,  %f,  %s,  %f" % (parc_number,refElev_feet,"not_used",vol3d_acft,"not_used",area2d_ac))
             # The above line may be commented out if screen display is not needed.
        
             # Write the input and output values to the output file.
 
-            #RYAN COMMENT. Correct output (from top): parc_number, refElev_feet,  not_used,  Volume_acft,  not_used,  2D_Area_ac   (seems okay to me) 
-            output.write("%i,  %f,  %s,  %f,  %s,  %f\r\n" % (parc_number,refElev_feet,"not_used",vol3d_acft,"not_used",area2d_ac))
+            #RYAN COMMENT. Correct output (from top): parc_number, refElev_feet,  not_used,  Volume_acft,  not_used,  2D_Area_ac 
+            output.write("%i,  %f,  %s,  %f,  %s,  %f\r\n" % (parc_number,refElev_feet,"not_used", "not_used", vol3d_acft,area2d_ac))
         
             # Increment the refPlane elevation and loop and round to user-specified number of decimals
             refElev_feet = round(refElev_feet + incElev_feet,numDecimals) # Round to avoid deviations due to floating point values.
