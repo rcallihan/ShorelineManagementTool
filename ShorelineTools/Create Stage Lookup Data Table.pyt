@@ -93,6 +93,10 @@ class CreateStageLookup(object):
         """Modify the values and properties of parameters before internal
         validation is performed.  This method is called whenever a parameter
         has been changed."""
+        
+        refPlane_list = ["ABOVE", "BELOW"]
+
+
         #
         return
 
@@ -103,8 +107,7 @@ class CreateStageLookup(object):
 
     def execute(self, parameters, messages):
         """The source code of the tool."""
-        return
-
+        
         inDEM_list = arcpy.GetParameterAsText(0)
         inDEMpath = arcpy.GetParameterAsText(1)
         inDEMdatum = arcpy.GetParameterAsText(2)
