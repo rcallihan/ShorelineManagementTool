@@ -15,7 +15,7 @@ class Toolbox(object):
 class CreateStageLookup(object):
     def __init__(self):
         """Define the tool (tool name is the name of the class)."""
-        self.label = "Create Stage Lookup tool"
+        self.label = "Create Stage Lookup Tool"
         self.description = ""
         self.canRunInBackground = True
 
